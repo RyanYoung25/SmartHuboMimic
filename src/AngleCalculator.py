@@ -179,7 +179,10 @@ def generateAngles(jsonString):
     RSP = reduceRadians(RSP)
     LSP = reduceRadians(LSP)
 
-    return np.array([REB, LEB, RSY, LSY, RSR, LSR])
+
+    angles = np.array([REB, LEB, RSY, LSY, RSR, LSR, RSP, LSP])
+    print len(angles)
+    return angles
 
 
 if __name__ == '__main__':

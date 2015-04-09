@@ -8,7 +8,7 @@ from maestor.srv import *
 class maestor:
 
     def __init__(self):
-        rospy.init_node("maestor_commands", anonymous=True)
+        #rospy.init_node("maestor_commands", anonymous=True)
         rospy.wait_for_service("initRobot")
         rospy.wait_for_service("setProperties")
         rospy.wait_for_service("command")

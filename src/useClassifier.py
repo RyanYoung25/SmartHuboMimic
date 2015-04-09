@@ -5,7 +5,7 @@ from sklearn.externals import joblib
 
 #Global random forest classifier object
 rfc = None
-threshold = .80
+threshold = .90
 
 
 def loadClassifier():
