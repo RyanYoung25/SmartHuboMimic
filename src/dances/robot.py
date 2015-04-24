@@ -6,7 +6,8 @@ from Maestor import maestor
 def theRobot():
     robot = maestor()
     bendDown(robot)
-    doTheRobot(robot)
+    for i in range(0, 3):
+        doTheRobot(robot)
     standUp(robot)
 
 def bendDown(robot):

@@ -101,7 +101,7 @@ def stand(robot):
 def walkLikeAnEgyptian():
     robot = maestor()
     crouch(robot)
-    for i in xrange(0, 3):
+    for i in xrange(0, 2):
         
         for i in xrange(0, 2): 
             one_way_S(robot)
@@ -120,8 +120,9 @@ def walkLikeAnEgyptian():
     stand(robot)
 
 def walkLikeAnEgyptianRobot(robot):
+    robot.setProperties("RSP RSR RSY LSP LSR LSY REP LEP RWP LWP RWY LWY", "velocity velocity velocity velocity velocity velocity velocity velocity velocity velocity velocity velocity", "1 1 1 1 1 1 1 1 1 1 1 1")
     crouch(robot)
-    for i in xrange(0, 3):
+    for i in xrange(0, 2):
         
         for i in xrange(0, 2): 
             one_way_S(robot)

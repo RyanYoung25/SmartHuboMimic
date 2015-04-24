@@ -79,7 +79,7 @@ def stayAlive():
     robot = maestor()
     crouch(robot)
     robot.setProperty("WST", "velocity", 0.3)
-    for i in xrange(0, 5):
+    for i in xrange(0, 3):
         armUp(robot)
         waitForJoints(robot)
         armDown(robot)
@@ -101,7 +101,8 @@ def getDanceList():
 def stayAliveRobot(robot):
     crouch(robot)
     robot.setProperty("WST", "velocity", 0.3)
-    for i in xrange(0, 5):
+    robot.setProperties("RSP RSR RSY LSP LSR LSY REP LEP RWP LWP RWY LWY", "velocity velocity velocity velocity velocity velocity velocity velocity velocity velocity velocity velocity", "1 1 1 1 1 1 1 1 1 1 1 1")
+    for i in xrange(0, 2):
         armUp(robot)
         waitForJoints(robot)
         armDown(robot)

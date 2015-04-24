@@ -20,6 +20,7 @@ def moveArmsUp(robot):
     robot.waitForJoint("LEP")
 
 def Dance(robot):
+    robot.setProperties("RSP RSR RSY LSP LSR LSY REP LEP RWP LWP RWY LWY", "velocity velocity velocity velocity velocity velocity velocity velocity velocity velocity velocity velocity", "1 1 1 1 1 1 1 1 1 1 1 1")
     robot.setProperties("RSR LSR", "velocity velocity", "2 2")
     for i in xrange(0, 3):
         flapUp(robot)

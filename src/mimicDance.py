@@ -97,22 +97,27 @@ class CopyCat:
     def __init__(self):
         #Wait for the service we want before we publish
         rospy.wait_for_service("setProperties")
-        self.offsets = [3.14, 3.14, 0, 0, -.4, .4, 0, 0] 
-        self.upper = [0, 0, 2, 2, 0, 2.5, 2, 2]
-        self.lower = [-2, -2, -2, -2, -2.5, 0, -2, -2]
-        self.oldFilter = [0, 0, 0, 0, 0, 0]
+        #[REB LEB RSY LSY RSR LSR RSP LSP]
+        # Each of these arrays are values for each joint that it matches up with
+        self.offsets = [3.14, 3.14, 1.52, 1.52, -.3, .3, 0, 0] #These current values work. Don't touch them
+        self.upper = [0, 0, 3, 3, 0, 2.5, 2, 2]
+        self.lower = [-2, -2, -3, -3, -2.5, 0, -2, -2]
+        self.oldFilter = [0, 0, 0, 0, 0, 0, 0, 0]
+        #Used for smoothing
         self.alpha = .3
+        #Getting the angles and publishing to hubo
         self.kinect = Kinect()
         self.robot = maestor()
+        #Window for dance gesture recognition
         self.slidingWindow = []
         self.capacity = 40
 
     def publishJointAngles(self, angles):
 
         #Offset the angles appropriately
-
+        print angles
         stringNums = ""
-        for index in xrange(0,6):
+        for index in xrange(0,8):
             newValue = float(angles[index]) - self.offsets[index]
             #Adjust to keep values in safe joint angles
             if newValue > self.upper[index]:
@@ -129,15 +134,21 @@ class CopyCat:
         stringNums = stringNums[:-1]
         #Publish the angles
         service = rospy.ServiceProxy("setProperties", setProperties)
-        service("REB LEB RSY LSY RSR LSR", "position position position position position position", stringNums)
+        print stringNums
+        self.robot.setProperties("RSP RSR RSY LSP LSR LSY REP LEP RWP LWP RWY LWY", "velocity velocity velocity velocity velocity velocity velocity velocity velocity velocity velocity velocity", "3 3 3 3 3 3 3 3 3 3 3 3")
+        service("REB LEB RSY LSY RSR LSR RSP LSP", "position position position position position position position position", stringNums)
         #print stringNums
 
 
-    def checkSlidingWindow(self):
+    def checkSlidingWindow(self, f):
         #Get a list of frames and turn it into a list of angles
         values = self.kinect.get_posture()
+        if values is None:
+            return None
         angleString = jsonMaker((values,))
         angles = generateAngles(angleString)
+
+        f.write(str(angles) + "\n")
 
         #Add the angle list to the list of angles in the sliding 
         # window list. If the window if above capacity pop the oldest
@@ -152,7 +163,6 @@ class CopyCat:
         #Get the average of the sliding window angles and run them
         # through the classifier
         avgAngles = self.getAvgAngles()
-        print len(avgAngles)
 
         #Classify the average angles
         result = classifySample(avgAngles)
@@ -169,7 +179,6 @@ class CopyCat:
         elif result == "ChickenDance":
             chickenDanceRobot(self.robot)
         elif result == "WalkLikeAnEgyptian":
-            print "Dance Now!!"
             walkLikeAnEgyptianRobot(self.robot)
         elif result == "YMCA":
             doTheYMCARobot(self.robot)
@@ -199,8 +208,11 @@ def main():
     loadClassifier()
     signal.signal(signal.SIGINT, endDemo)
     mimic = CopyCat()
+    f= open("log.log", "w")
     while continuing:
-        angles = mimic.checkSlidingWindow()
+        angles = mimic.checkSlidingWindow(f)
+        if angles is None:
+            continue
         mimic.publishJointAngles(angles)
         time.sleep(.03)
 

@@ -99,7 +99,7 @@ def stand(robot):
 def doTheYMCA():
     robot = maestor()
     crouch(robot)
-    for i in xrange(0,3):   #for(int i=0; i < 3; i ++) 
+    for i in xrange(0,2):   #for(int i=0; i < 3; i ++) 
         theY(robot)
         waitForJoints(robot)
         theM(robot)
@@ -114,7 +114,9 @@ def doTheYMCA():
 
 def doTheYMCARobot(robot):
     crouch(robot)
-    for i in xrange(0,3):   #for(int i=0; i < 3; i ++) 
+    robot.setProperties("RSP RSR RSY LSP LSR LSY REP LEP RWP LWP RWY LWY", "velocity velocity velocity velocity velocity velocity velocity velocity velocity velocity velocity velocity", "1 1 1 1 1 1 1 1 1 1 1 1")
+
+    for i in xrange(0,2):   #for(int i=0; i < 3; i ++) 
         theY(robot)
         waitForJoints(robot)
         theM(robot)
